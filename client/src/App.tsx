@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence, MotionConfig, motion, useReducedMotion } from 'framer-motion';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { Navbar } from './components/common/Navbar';
@@ -20,6 +21,38 @@ import { OffersPage } from './pages/OffersPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 
+const AnimatedRoutes: React.FC = () => {
+  const location = useLocation();
+  const shouldReduceMotion = useReducedMotion();
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.main
+        key={location.pathname}
+        className="flex-1"
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={shouldReduceMotion ? undefined : { opacity: 0, y: -8 }}
+        transition={{ duration: 0.2, ease: 'easeOut' }}
+      >
+        <Routes location={location}>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/book" element={<BookingPage />} />
+          <Route path="/ride/:id" element={<RideTrackingPage />} />
+          <Route path="/driver" element={<DriverDashboardPage />} />
+          <Route path="/admin" element={<AdminDashboardPage />} />
+          <Route path="/history" element={<RideHistoryPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/safety" element={<SafetyCenterPage />} />
+          <Route path="/offers" element={<OffersPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Routes>
+      </motion.main>
+    </AnimatePresence>
+  );
+};
+
 export const App: React.FC = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(2);
@@ -28,43 +61,30 @@ export const App: React.FC = () => {
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <div className="min-h-screen flex flex-col bg-theme-bg text-theme-text font-sans antialiased transition-colors">
-            {/* Global Navbar */}
-            <Navbar
-              onOpenNotifications={() => setIsNotificationOpen(true)}
-              unreadCount={unreadCount}
-            />
+          <MotionConfig reducedMotion="user">
+            <div className="min-h-screen flex flex-col bg-theme-bg text-theme-text font-sans antialiased transition-colors">
+              {/* Global Navbar */}
+              <Navbar
+                onOpenNotifications={() => setIsNotificationOpen(true)}
+                unreadCount={unreadCount}
+              />
 
-            {/* Main Page Content */}
-            <main className="flex-1">
-              <Routes>
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/book" element={<BookingPage />} />
-                <Route path="/ride/:id" element={<RideTrackingPage />} />
-                <Route path="/driver" element={<DriverDashboardPage />} />
-                <Route path="/admin" element={<AdminDashboardPage />} />
-                <Route path="/history" element={<RideHistoryPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/safety" element={<SafetyCenterPage />} />
-                <Route path="/offers" element={<OffersPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-              </Routes>
-            </main>
+              <AnimatedRoutes />
 
-            {/* Global Footer */}
-            <Footer />
+              {/* Global Footer */}
+              <Footer />
 
-            {/* Settings & Theme Drawer */}
-            <ThemeDrawer />
+              {/* Settings & Theme Drawer */}
+              <ThemeDrawer />
 
-            {/* Notifications Drawer */}
-            <NotificationDrawer
-              isOpen={isNotificationOpen}
-              onClose={() => setIsNotificationOpen(false)}
-              onNotificationsChanged={() => setUnreadCount(0)}
-            />
-          </div>
+              {/* Notifications Drawer */}
+              <NotificationDrawer
+                isOpen={isNotificationOpen}
+                onClose={() => setIsNotificationOpen(false)}
+                onNotificationsChanged={() => setUnreadCount(0)}
+              />
+            </div>
+          </MotionConfig>
         </Router>
       </AuthProvider>
     </ThemeProvider>

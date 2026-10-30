@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import {
   Bike,
   Zap,
@@ -95,6 +96,7 @@ const FAQS = [
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
+  const shouldReduceMotion = useReducedMotion();
 
   // Booking widget state
   const [pickup, setPickup] = useState<{ lat: number; lng: number; title: string } | null>({
@@ -169,7 +171,12 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
             {/* Left Column: Value Proposition & Booking Panel */}
-            <div className="lg:col-span-6 space-y-6">
+            <motion.div
+              className="lg:col-span-6 space-y-6"
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, ease: 'easeOut' }}
+            >
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-theme-surface border border-theme-border text-xs font-bold text-theme-text shadow-xs">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span>Over 50,000+ Active Captains in Bengaluru</span>
@@ -186,7 +193,12 @@ export const LandingPage: React.FC = () => {
               </div>
 
               {/* Interactive Booking Card inside Hero */}
-              <div className="p-5 sm:p-6 rounded-3xl bg-theme-surface border border-theme-border shadow-elevated space-y-4">
+              <motion.div
+                className="p-5 sm:p-6 rounded-3xl bg-theme-surface border border-theme-border shadow-elevated space-y-4"
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.12, ease: 'easeOut' }}
+              >
                 <div className="space-y-3">
                   <LocationSearchInput
                     label="Pickup Location"
@@ -274,11 +286,16 @@ export const LandingPage: React.FC = () => {
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Right Column: Live Map Preview */}
-            <div className="lg:col-span-6 space-y-4">
+            <motion.div
+              className="lg:col-span-6 space-y-4"
+              initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.65, delay: 0.1, ease: 'easeOut' }}
+            >
               <div className="relative">
                 <InteractiveMap
                   pickupLocation={pickup}
@@ -289,7 +306,11 @@ export const LandingPage: React.FC = () => {
                 />
 
                 {/* Map Floating Card */}
-                <div className="absolute top-4 left-4 z-20 p-3 rounded-2xl bg-theme-surface/95 backdrop-blur-md border border-theme-border shadow-elevated max-w-xs hidden sm:block">
+                <motion.div
+                  className="absolute top-4 left-4 z-20 p-3 rounded-2xl bg-theme-surface/95 backdrop-blur-md border border-theme-border shadow-elevated max-w-xs hidden sm:block"
+                  animate={shouldReduceMotion ? undefined : { y: [0, -5, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                >
                   <div className="flex items-center gap-2 text-xs font-bold text-theme-text">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
                     <span>Real-time Fleet Telemetry</span>
@@ -297,15 +318,21 @@ export const LandingPage: React.FC = () => {
                   <p className="text-[11px] text-theme-text-muted mt-1">
                     Live road traffic and captain locations updated every 5 seconds.
                   </p>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* 2. POPULAR COMMUTE ROUTES */}
-      <section className="py-12 bg-theme-surface border-y border-theme-border">
+      <motion.section
+        className="py-12 bg-theme-surface border-y border-theme-border"
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+        whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.12 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
@@ -323,10 +350,14 @@ export const LandingPage: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {POPULAR_ROUTES.map((route, idx) => (
-              <button
+              <motion.button
                 key={idx}
                 type="button"
                 onClick={() => handlePopularRouteSelect(route)}
+                initial={shouldReduceMotion ? false : { opacity: 0 }}
+                whileInView={shouldReduceMotion ? undefined : { opacity: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.4, delay: idx * 0.07, ease: 'easeOut' }}
                 className="p-4 rounded-2xl border border-theme-border bg-theme-bg hover:border-theme-primary hover:shadow-subtle transition-all text-left flex flex-col justify-between group"
               >
                 <div className="space-y-2">
@@ -348,14 +379,20 @@ export const LandingPage: React.FC = () => {
                     ₹{route.bikeFareRupees}
                   </div>
                 </div>
-              </button>
+              </motion.button>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 3. HOW IT WORKS */}
-      <section className="py-16 sm:py-24">
+      <motion.section
+        className="py-16 sm:py-24"
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+        whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.12 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
             <span className="text-xs font-bold uppercase tracking-wider text-theme-primary">
@@ -396,8 +433,12 @@ export const LandingPage: React.FC = () => {
                 icon: <CheckCircle2 className="w-6 h-6 text-purple-500" />,
               },
             ].map((stepItem) => (
-              <div
+              <motion.div
                 key={stepItem.step}
+                initial={shouldReduceMotion ? false : { opacity: 0 }}
+                whileInView={shouldReduceMotion ? undefined : { opacity: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.4, delay: Number(stepItem.step) * 0.07, ease: 'easeOut' }}
                 className="p-6 rounded-3xl bg-theme-surface border border-theme-border shadow-subtle relative group hover:-translate-y-1 transition-transform"
               >
                 <div className="text-3xl font-black text-theme-text-muted/30 font-display mb-4">
@@ -408,14 +449,20 @@ export const LandingPage: React.FC = () => {
                 </div>
                 <h3 className="text-base font-bold text-theme-text mb-2">{stepItem.title}</h3>
                 <p className="text-xs text-theme-text-muted leading-relaxed">{stepItem.desc}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 4. SAFETY & CAPTAIN VERIFICATION */}
-      <section className="py-16 sm:py-24 bg-theme-surface border-y border-theme-border">
+      <motion.section
+        className="py-16 sm:py-24 bg-theme-surface border-y border-theme-border"
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+        whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.12 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-6 space-y-6">
@@ -448,13 +495,20 @@ export const LandingPage: React.FC = () => {
                     desc: 'Share live GPS tracking link with friends and family with a single click.',
                   },
                 ].map((item, idx) => (
-                  <div key={idx} className="p-4 rounded-2xl border border-theme-border bg-theme-bg space-y-1.5">
+                  <motion.div
+                    key={idx}
+                    initial={shouldReduceMotion ? false : { opacity: 0 }}
+                    whileInView={shouldReduceMotion ? undefined : { opacity: 1 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.4, delay: idx * 0.07, ease: 'easeOut' }}
+                    className="p-4 rounded-2xl border border-theme-border bg-theme-bg space-y-1.5"
+                  >
                     <h4 className="text-xs font-bold text-theme-text flex items-center gap-1.5">
                       <Shield className="w-4 h-4 text-emerald-500 shrink-0" />
                       {item.title}
                     </h4>
                     <p className="text-[11px] text-theme-text-muted leading-normal">{item.desc}</p>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -503,10 +557,16 @@ export const LandingPage: React.FC = () => {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 5. PROMO OFFERS & REFERRALS */}
-      <section className="py-16 sm:py-24">
+      <motion.section
+        className="py-16 sm:py-24"
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+        whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.12 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
             <div>
@@ -546,8 +606,12 @@ export const LandingPage: React.FC = () => {
                 badge: 'Commuter',
               },
             ].map((coupon, idx) => (
-              <div
+              <motion.div
                 key={idx}
+                initial={shouldReduceMotion ? false : { opacity: 0 }}
+                whileInView={shouldReduceMotion ? undefined : { opacity: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.4, delay: idx * 0.08, ease: 'easeOut' }}
                 className="p-6 rounded-3xl bg-theme-surface border border-theme-border shadow-subtle flex flex-col justify-between relative group"
               >
                 <div className="space-y-3">
@@ -575,14 +639,20 @@ export const LandingPage: React.FC = () => {
                     Copy Code
                   </button>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 6. TESTIMONIALS */}
-      <section className="py-16 sm:py-24 bg-theme-surface border-y border-theme-border">
+      <motion.section
+        className="py-16 sm:py-24 bg-theme-surface border-y border-theme-border"
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+        whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.12 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2">
             <span className="text-xs font-bold uppercase tracking-wider text-theme-primary">
@@ -623,8 +693,12 @@ export const LandingPage: React.FC = () => {
                 rating: 5,
               },
             ].map((t, idx) => (
-              <div
+              <motion.div
                 key={idx}
+                initial={shouldReduceMotion ? false : { opacity: 0 }}
+                whileInView={shouldReduceMotion ? undefined : { opacity: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.4, delay: idx * 0.08, ease: 'easeOut' }}
                 className="p-6 rounded-3xl bg-theme-bg border border-theme-border shadow-subtle flex flex-col justify-between"
               >
                 <div className="space-y-3">
@@ -649,14 +723,20 @@ export const LandingPage: React.FC = () => {
                     <p className="text-[10px] text-theme-text-muted">{t.role}</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 7. FAQ ACCORDION */}
-      <section className="py-16 sm:py-24">
+      <motion.section
+        className="py-16 sm:py-24"
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+        whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.12 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 space-y-2">
             <span className="text-xs font-bold uppercase tracking-wider text-theme-primary">
@@ -687,20 +767,37 @@ export const LandingPage: React.FC = () => {
                       }`}
                     />
                   </button>
-                  {isOpen && (
-                    <div className="px-5 pb-5 text-xs text-theme-text-muted leading-relaxed border-t border-theme-border pt-3">
-                      {faq.a}
-                    </div>
-                  )}
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        key="answer"
+                        initial={shouldReduceMotion ? false : { opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={shouldReduceMotion ? undefined : { opacity: 0, height: 0 }}
+                        transition={{ duration: 0.22, ease: 'easeOut' }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-5 pb-5 text-xs text-theme-text-muted leading-relaxed border-t border-theme-border pt-3">
+                          {faq.a}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               );
             })}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 8. DRIVER RECRUITMENT CTA BANNER */}
-      <section className="py-12 bg-theme-primary text-theme-secondary">
+      <motion.section
+        className="py-12 bg-theme-primary text-theme-secondary"
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+        whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-1 text-center md:text-left">
@@ -720,7 +817,7 @@ export const LandingPage: React.FC = () => {
             </button>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 };
