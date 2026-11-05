@@ -3,32 +3,32 @@
 @tailwind utilities;
 
 :root {
-  /* Default: Rapido-inspired Yellow and Black */
-  --color-primary: #FFD500;
-  --color-primary-hover: #E6C000;
-  --color-primary-light: #FFF8D6;
+  /* Default: city amber and ink */
+  --color-primary: #A16207;
+  --color-primary-hover: #854D0E;
+  --color-primary-light: #FEF3C7;
   --color-secondary: #151515;
-  --color-bg: #F8F9FA;
+  --color-bg: #F6F7F9;
   --color-surface: #FFFFFF;
-  --color-surface-hover: #F1F3F5;
-  --color-border: #E5E7EB;
-  --color-text: #111827;
-  --color-text-muted: #6B7280;
+  --color-surface-hover: #F1F3F6;
+  --color-border: #E2E6EC;
+  --color-text: #151922;
+  --color-text-muted: #526072;
   --color-accent: #10B981;
 }
 
-/* Theme 1: Rapido Yellow & Dark */
+/* Theme 1: City Amber & Ink */
 [data-theme="rapido-yellow"] {
-  --color-primary: #FFD500;
-  --color-primary-hover: #E6C000;
-  --color-primary-light: #FFF8D6;
+  --color-primary: #A16207;
+  --color-primary-hover: #854D0E;
+  --color-primary-light: #FEF3C7;
   --color-secondary: #151515;
-  --color-bg: #FAFAFA;
+  --color-bg: #F6F7F9;
   --color-surface: #FFFFFF;
-  --color-surface-hover: #F4F4F5;
-  --color-border: #E4E4E7;
-  --color-text: #18181B;
-  --color-text-muted: #71717A;
+  --color-surface-hover: #F1F3F6;
+  --color-border: #E2E6EC;
+  --color-text: #151922;
+  --color-text-muted: #526072;
   --color-accent: #10B981;
 }
 
@@ -130,6 +130,60 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  min-width: 320px;
+  font-family: 'Plus Jakarta Sans', Inter, system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  font-feature-settings: 'ss01' on;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: Outfit, 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button:not(:disabled) {
+  touch-action: manipulation;
+}
+
+button:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+::selection {
+  color: var(--color-text);
+  background: var(--color-primary-light);
 }
 
 .reduced-motion * {

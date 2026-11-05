@@ -22,11 +22,11 @@ export interface ThemeOption {
 export const THEME_OPTIONS: ThemeOption[] = [
   {
     id: 'rapido-yellow',
-    name: 'Rapido Yellow & Dark',
-    description: 'Original Indian bike taxi signature styling with electric yellow and charcoal.',
-    primaryColor: '#FFD500',
+    name: 'City Amber & Ink',
+    description: 'A crisp city-inspired amber accent with ink-dark contrast.',
+    primaryColor: '#A16207',
     secondaryColor: '#151515',
-    bgColor: '#FAFAFA',
+    bgColor: '#F6F7F9',
     isDark: false,
   },
   {

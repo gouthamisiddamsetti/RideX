@@ -33,7 +33,7 @@ const AnimatedRoutes: React.FC = () => {
         initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         exit={shouldReduceMotion ? undefined : { opacity: 0, y: -8 }}
-        transition={{ duration: 0.2, ease: 'easeOut' }}
+        transition={{ duration: 0.26, ease: 'easeOut' }}
       >
         <Routes location={location}>
           <Route path="/" element={<LandingPage />} />
